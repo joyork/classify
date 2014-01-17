@@ -1,0 +1,41 @@
+#if($count)
+#set($count=$count+1)
+#else
+#set($count=0)
+#end
+#if($pager)
+<div class="page_panel">
+<span><a href="${pager.getUrl(${pager.firstPage})}">首页</a></span>
+#if(${pager.hasPrev()})
+	<a href="${pager.getUrl(${pager.prevPage})}">上一页</a>
+#else
+	<span class="nolink">上一页</span>
+#end
+#if(${pager.beginDot})...#end
+#foreach($page_num in ${pager.allPages})
+	#if($page_num == ${pager.page})
+	<span class="active">${page_num}</span>
+	#else
+	<a href="${pager.getUrl($page_num)}">${page_num}</a>
+	#end
+#end
+#if(${pager.endDot})...#end
+#if(${pager.hasNext()})
+	<a href="${pager.getUrl(${pager.nextPage})}">下一页</a>
+#else
+	<span class="nolink">下一页</span>
+#end
+<input type="text" size="2" id="text_$count"  value="$pager.page" /> 
+<input type="button" id="button_$count" class="btn" value="转到" onclick="jumpTo(document.getElementById('text_$count').value,${pager.pageCount},'$pager.baseUrl');" />
+每页
+<select name="pageSizeSelect" id="pageSize_$count" onchange="pageSizeChanged(${pager.pagesize},this.value,'$pager.baseUrl')">
+<option value="12" #if(${pager.pagesize}==12) selected="selected" #end>12</option>
+<option value="20" #if(${pager.pagesize}==20) selected="selected" #end>20</option>
+<option value="30" #if(${pager.pagesize}==30) selected="selected" #end>30</option>
+<option value="50" #if(${pager.pagesize}==50) selected="selected" #end>50</option>
+<option value="80" #if(${pager.pagesize}==80) selected="selected" #end>80</option>
+<option value="100" #if(${pager.pagesize}==100) selected="selected" #end>100</option>
+</select>
+条, 共${pager.count}条, 第${pager.page}/${pager.pageCount}页
+</div>
+#end

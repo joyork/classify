@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+	">
+
+    <aop:aspectj-autoproxy/>
+<!--     <bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator" /> -->
+    
+	<context:component-scan base-package="com.netease.news" />
+
+	<!-- 数据库配置begin -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="parentDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="maxPoolSize" value="${jdbc.maxPoolSize}" />
+		<property name="minPoolSize" value="${jdbc.minPoolSize}" />
+		<property name="initialPoolSize" value="${jdbc.initialPoolSize}" />
+		<property name="acquireIncrement" value="${jdbc.acquireIncrement}" />
+		<property name="maxIdleTime" value="${jdbc.maxIdleTime}" />
+		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}" />
+	</bean>
+	<!-- main主数据源 -->
+	<bean id="mainMasterDataSource" parent="parentDataSource">
+		<property name="driverClass" value="${main.master.jdbc.driverClass}" />
+		<property name="jdbcUrl" value="${main.master.jdbc.jdbcUrl}" />
+		<property name="user" value="${main.master.jdbc.user}" />
+		<property name="password" value="${main.master.jdbc.password}" />
+	</bean>
+	<!-- main从数据源 -->
+	<bean id="mainSlaveDataSource" parent="parentDataSource">
+		<property name="driverClass" value="${main.slave.jdbc.driverClass}" />
+		<property name="jdbcUrl" value="${main.slave.jdbc.jdbcUrl}" />
+		<property name="user" value="${main.slave.jdbc.user}" />
+		<property name="password" value="${main.slave.jdbc.password}" />
+	</bean>
+	<!-- 用于动态选择主、从数据库的数据源实现
+	<bean id="dataSource" class="com.netease.flowgame.aop.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry key="slave" value-ref="mainSlaveDataSource" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="mainMasterDataSource" />
+	</bean>
+	 -->
+	<!-- ibatis集成
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:sql_map_config.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	 -->
+	<!-- 注册Spring context回调函数,用于非spring管理的类获取bean -->
+	<bean id="springContext" class="com.netease.news.utils.SpringContextHelper"></bean>
+
+	<!-- 切换数据源拦截器，拦截com.netease.flowgame.dao.impl下的所有类的所有方法
+	<bean id="dataSourceAdvisor"
+		class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice">
+			<bean class="com.netease.flowgame.aop.DataSourceAdvice">
+			</bean>
+		</property>
+		<property name="patterns">
+			<list>
+				<value>com.*.*DaoImpl.*</value>
+			</list>
+		</property>
+	</bean>
+	 -->
+	<!-- 所有以DaoImpl结尾的bean都拦截以自动选择数据库 -->
+<!-- 	<bean -->
+<!-- 		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator"> -->
+<!-- 		<property name="beanNames" value="*DaoImpl" /> -->
+<!-- 		<property name="interceptorNames"> -->
+<!-- 			<list> -->
+<!-- 				<value>dataSourceAdvisor</value> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+
+	<!-- 发布软件相关任务线程池 -->
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="5" />
+		<property name="maxPoolSize" value="10" />
+		<property name="queueCapacity" value="1000" />
+	</bean>
+	
+	<!-- ==== 缓存拦截器 ==== 
+	<bean id="cacheService" class="com.netease.flowgame.service.impl.MemcachedService">
+	</bean>
+	-->
+	<!-- 缓存查找/创建拦截器 
+	<bean id="cachePointcutAdvisor" class="com.netease.flowgame.aop.CachePointcutAdvisor">
+		<property name="advice">
+			<bean class="com.netease.flowgame.aop.CacheInterceptor">
+				<property name="cache" ref="cacheService" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames" value="*ServiceImpl" />
+		<property name="interceptorNames">
+			<list>
+				<value>cachePointcutAdvisor</value>
+			</list>
+		</property>
+	</bean>
+    -->
+    
+	<!-- ======================== 相关组件开始 ======================== -->
+	<!-- 后台登录验证，调用发布器Webservice 
+	<bean id="cmsWebService"
+		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl"
+			value="http://ws.cms.163.com/webservice/CmsWebService" />
+		<property name="serviceInterface" value="com.netease.cms.service.CmsWebService" />
+	</bean>
+	-->
+	
+	<!-- 跟贴Webservice 
+	<bean id="commentWebService"
+		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl"
+			value="http://ws.comment.163.com/hessian/commentService" />
+		<property name="serviceInterface" value="com.netease.reply.service.CommentWebService" />
+	</bean>
+	-->
+	<!-- 图片库Webservice 
+	<bean id="photoService240"
+		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl" value="http://ws.photo240.163.com/pic" />
+		<property name="serviceInterface" value="com.netease.photo.service.PhotoService240" />
+	</bean>
+	-->
+	<!-- 图片存储Webservice 
+	<bean id="photoStorageService"
+		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl"
+			value="http://rpc.photo.163.com/hessian/photoStorageService" />
+		<property name="serviceInterface"
+			value="com.netease.photo.webservice.hessian.PhotoStorageService" />
+		<property name="chunkedPost" value="false" />
+	</bean>
+	-->
+
+</beans>

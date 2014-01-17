@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>网易休闲游戏后台管理系统-系统登录</title>
+<style type="text/css">
+<!--
+body { margin:0;}
+.infomessage { font-size:12px; color:#FF0000;}
+#loginwindow { width:450px; height:240px; margin-left:auto; margin-right:auto; margin-top:50px; border:#999999 solid 1px;}
+#loginwindow h1 { font-size:22px; font-weight:bold; font-family:Verdana, Arial, Helvetica, sans-serif; color:#FFFFFF; text-align: center; background:url(/admin/images/nav_bg.jpg) repeat-x; height:47px; line-height:180%; margin:0px; padding-top:6px;}
+#loginwindow .mainwindow { font-size:18px; font-weight:bold; font-family:Verdana, Arial, Helvetica, sans-serif; color:#666666; text-align: center; height:47px; line-height:180%; margin:0px; padding-top:6px;}
+.left { float:left; width:200px; text-align:right;}
+.right { float:right;}
+-->
+</style>
+<script type="text/javascript">
+    function display(id){
+
+        var traget=document.getElementById(id);
+         if(traget.style.display=="none"){
+                 traget.style.display="";
+         }else{
+                 traget.style.display="none";
+       }
+    }
+    
+    function init()
+    {
+    	if(top.frames.length > 0){
+    		top.location.href = location.href;
+    	}
+    	document.getElementById("userid").focus();
+    }
+</script>
+</head>
+<body onload="init()">
+<div class="loginwindow" id="loginwindow" >
+<form id="loginform" name="loginform" method="post" action="/admin/login">
+  <h1>网易休闲游戏后台管理系统</h1>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="39%" height="27">&nbsp;</td>
+    <td width="61%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right">用户名：</td>
+    <td><input type="text" name="userid" id="userid" /></td>
+  </tr>
+
+  <tr>
+    <td height="20">&nbsp;</td>
+	
+    <td>#if($errtype=="noname")<div id="UserErrorInfo" class="infomessage" >请输入您的管理系统帐号。</div>#end</td>
+  </tr>
+  <tr>
+    <td align="right">密码：</td>
+    <td><input type="password" name="passwd" id="passwd" /></td>
+  </tr>
+
+  <tr>
+    <td height="20" align="right">&nbsp;</td>
+    <td>#if($errtype=="nopasswd")
+    	<div id="PssWordErrorInfo" class="infomessage" >请输入密码。</div>
+    #end
+	<div id="errinfo" class="infomessage" >#if($errtype=="checkfailed")用户名或密码验证失败。
+	#elseif($errtype=="local")休闲游戏系统验证失败。
+	#elseif($errtype=="disallow")帐号被冻结。#end</div>
+	</td>
+  </tr>
+  <tr>
+    <td height="21" align="right">&nbsp;</td>
+    <td><input type="submit" name="Submit" value="&nbsp;&nbsp;提&nbsp;&nbsp;交&nbsp;&nbsp;" /></td>
+  </tr>
+
+</table>
+</form>
+</div>
+</body>
+</html>

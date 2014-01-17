@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DeviceAssistHistory">
+
+    <typeAlias alias="deviceAssistHistory" type="com.netease.flowgame.pojo.DeviceAssistHistory"/>
+    
+    <sql id="selectall">
+        select id, device_id as deviceId, game_level as gameLevel, step, consume_time as consumeTime,
+        star, complete_time as completeTime, score, assisted_by as assistedBy from device_assist_history
+    </sql>
+
+	<select id="select" resultClass="deviceAssistHistory" parameterClass="java.lang.Integer">
+		<include refid="selectall" />
+		where id = #id#
+	</select>
+
+	<select id="selectList" resultClass="deviceAssistHistory"
+		parameterClass="java.util.Map">
+		<include refid="selectall" />
+		<dynamic prepend="where">
+			<isNotEmpty property="deviceId" prepend="and">
+				device_id = #deviceId#
+        	</isNotEmpty>
+			<isNotEmpty property="gameLevel" prepend="and">
+				game_level = #gameLevel#
+        	</isNotEmpty>
+			<isNotEmpty property="step" prepend="and">
+				step = #step#
+        	</isNotEmpty>
+        	<isNotEmpty property="consumeTime" prepend="and">
+				consume_time = #consumeTime#
+        	</isNotEmpty>
+        	<isNotEmpty property="star" prepend="and">
+				star = #star#
+        	</isNotEmpty>
+        	<isNotEmpty property="completeTime" prepend="and">
+				complete_time = #completeTime#
+        	</isNotEmpty>
+        	<isNotEmpty property="score" prepend="and">
+				score = #score#
+        	</isNotEmpty>
+        	<isNotEmpty property="assistedBy" prepend="and">
+				assisted_by = #assitedBy#
+        	</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="insertDeviceAssistHistory" parameterClass="deviceAssistHistory">
+		insert into	device_assist_history(id,device_id,game_level,step,consume_time,star,complete_time,
+		score,assisted_by)
+		values(#id#,#deviceId#,#gameLevel#,#step#,#consumeTime#,#star#,#completeTime#,#score#,#assistedBy#)
+    </insert>
+
+	<update id="updateDeviceAssistHistory" parameterClass="deviceAssistHistory">
+		update device_assist_history set device_id=#deviceId#, game_level=#gameLevel#,step=#step#,
+		consume_time=#consumeTime#,star=#star#,complete_time=#completeTime#,score=#score#,
+		assisted_by=#assistedBy#
+		where id = #id#
+    </update>
+
+	<delete id="deleteDeviceAssistHistory" parameterClass="java.util.HashMap">
+		delete from device_assist_history
+		<dynamic prepend="where">
+			<isNotEmpty property="id" prepend="and">
+				id = #id#
+        	</isNotEmpty>
+			<isNotEmpty property="deviceId" prepend="and">
+				device_id = #deviceId#
+        	</isNotEmpty>
+			<isNotEmpty property="gameLevel" prepend="and">
+				game_level = #gameLevel#
+        	</isNotEmpty>
+			<isNotEmpty property="step" prepend="and">
+				step = #step#
+        	</isNotEmpty>
+			<isNotEmpty property="consumeTime" prepend="and">
+				consume_time = #consumeTime#
+        	</isNotEmpty>
+		</dynamic>
+	</delete>
+	
+</sqlMap>

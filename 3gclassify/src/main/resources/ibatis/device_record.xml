@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DeviceRecord">
+
+    <typeAlias alias="deviceRecord" type="com.netease.flowgame.pojo.DeviceRecord"/>
+    
+    <sql id="selectAll">
+        select device_id as deviceId, game_level as gameLevel, step, consume_time as consumeTime, star, complete_time as completeTime,
+        tip_count as tipCount, score, is_assisted as isAssisted, assisted_by as assistedBy from device_record
+    </sql>
+    
+    <insert id="insertDeviceRecord" parameterClass="deviceRecord">
+    	insert into device_record
+    	   (device_id, game_level, step, consume_time, star, complete_time, tip_count, score, is_assisted, assisted_by)
+    	values
+    	   (#deviceId#, #gameLevel#, #step#, #consumeTime#, #star#, #completeTime#, #tipCount#, #score#, #isAssisted#, #assistedBy#)
+		ON DUPLICATE KEY UPDATE 
+			step=#step#,consume_time=#consumeTime#,star=#star#,complete_time=#completeTime#,
+			tip_count=#tipCount#,score=#score#,is_assisted=#isAssisted#,assisted_by=#assistedBy#
+    </insert>
+    
+    <select id="selectList" resultClass="deviceRecord" parameterClass="java.util.Map">
+        <include refid="selectAll"/>
+        <dynamic prepend="where">
+        	<isNotEmpty property="deviceId" prepend="and">
+        		device_id = #deviceId#
+        	</isNotEmpty>
+            <isNotEmpty property="gameLevel" prepend="and">
+                game_level = #gameLevel#
+            </isNotEmpty>
+            <isNotEmpty property="star" prepend="and">
+                star = #star#
+            </isNotEmpty>
+            <isNotEmpty property="tipCount" prepend="and">
+                tip_count = #tipCount#
+            </isNotEmpty>
+            <isNotEmpty property="isAssisted" prepend="and">
+                is_assisted = #isAssisted#
+            </isNotEmpty>
+        </dynamic>
+    </select>
+
+    <select id="selectById" resultClass="deviceRecord" parameterClass="java.util.Map">
+        <include refid="selectAll"/>
+        where device_id = #deviceId# and game_level = #gameLevel#
+    </select>
+
+    <update id="updateDeviceRecord" parameterClass="deviceRecord">
+    	update device_record set step = #step#, consume_time = #consumeTime#, star = #star#, complete_time = #completeTime#, tip_count = #tipCount#, 
+    	score = #score#, is_assisted = #isAssisted#, assisted_by = #assistedBy#
+    	where device_id = #deviceId# and game_level = #gameLevel#
+    </update>
+
+	<delete id="deleteDeviceRecord" parameterClass="java.util.Map">
+		delete from device_record where device_id = #deviceId# and game_level = #gameLevel#
+	</delete>
+</sqlMap>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="CoinBalance">
+
+	<typeAlias alias="coinBalance" type="com.netease.flowgame.pojo.CoinBalance" />
+
+	<sql id="selectall">
+		select id, device_id as deviceId, source, amount, collect_time as collectTime,
+		game_level as gameLevel, app_id as appId, share_to as shareTo, tip_count as
+		tipCount from coin_balance
+    </sql>
+
+	<select id="select" resultClass="coinBalance" parameterClass="java.lang.Integer">
+		<include refid="selectall" />
+		where id = #id#
+	</select>
+
+	<select id="selectList" resultClass="coinBalance"
+		parameterClass="java.util.Map">
+		<include refid="selectall" />
+		<dynamic prepend="where">
+			<isNotEmpty property="deviceId" prepend="and">
+				device_id = #deviceId#
+        	</isNotEmpty>
+			<isNotEmpty property="source" prepend="and">
+				source = #source#
+        	</isNotEmpty>
+			<isNotEmpty property="gameLevel" prepend="and">
+				game_level = #gameLevel#
+        	</isNotEmpty>
+			<isNotEmpty property="appId" prepend="and">
+				app_id = #appId#
+        	</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="insertCoinBalance" parameterClass="coinBalance">
+		insert into
+		coin_balance(device_id,source,amount,collect_time,game_level,app_id,
+		share_to,tip_count)
+		values(#deviceId#,#source#,#amount#,#collectTime#,#gameLevel#,
+		#appId#,#shareTo#,#tipCount#)
+    </insert>
+
+	<update id="updateCoinBalance" parameterClass="coinBalance">
+		update coin_balance set device_id=#deviceId#,source=#source#,amount=#amount#,
+		collect_time=#collectTime#,game_level=#gameLevel#,app_id=#appId#,
+		share_to=#shareTo#,tip_count=#tipCount#
+		where id = #id#
+    </update>
+
+	<delete id="deleteCoinBalance" parameterClass="java.util.HashMap">
+		delete from coin_balance
+		<dynamic prepend="where">
+			<isNotEmpty property="id" prepend="and">
+				id = #id#
+        	</isNotEmpty>
+			<isNotEmpty property="deviceId" prepend="and">
+				device_id = #deviceId#
+        	</isNotEmpty>
+			<isNotEmpty property="source" prepend="and">
+				source = #source#
+        	</isNotEmpty>
+			<isNotEmpty property="gameLevel" prepend="and">
+				game_level = #gameLevel#
+        	</isNotEmpty>
+			<isNotEmpty property="appId" prepend="and">
+				app_id = #appId#
+        	</isNotEmpty>
+		</dynamic>
+	</delete>
+	
+</sqlMap>

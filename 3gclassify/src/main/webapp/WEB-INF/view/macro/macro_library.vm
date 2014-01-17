@@ -1,0 +1,3 @@
+#macro(test $name)
+    this is macro test! $!{name}
+#end

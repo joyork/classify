@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>编辑用户</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="/admin/styles/mystyle.css" rel="stylesheet" type="text/css" />
+<link href="/admin/scripts/jqueryplugin/css/jquery-ui-1.8.10.custom.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/admin/scripts/jquery-1.4.4.min.js" ></script>
+<script type="text/javascript" src="/admin/scripts/jqueryplugin/jquery-ui-1.8.10.custom.min.js" ></script>
+<script type="text/javascript">
+//document ready
+$(document).ready(function(){
+
+
+$("#submitBtn").click(function(){
+	//提交
+	var useridbak=$("#useridbak").val();
+	var nickname=$("#nickname").val();
+	var email=$("#email").val();
+	var phone=$("#phone").val();
+	
+	if(useridbak=="")
+	{
+		alert("请查询出用户再提交.");
+		$("#userid").focus();
+		return;
+	}
+
+	jQuery.ajax({
+					        type:"POST",
+					        async: false,
+					        url:"/admin/user/add",
+					        data:{userid:useridbak,nickname:nickname,email:email,phone:phone,pwd1:''},
+					        dataType : 'json',
+					        beforeSend:function(){
+					        },
+					        success:function(data){
+							window.location.reload();
+					        }
+					});// end ajax
+
+	parent.closeDialog(1);
+});//提交
+
+$("#submitBtn2").click(function(){
+	//提交
+	var pwd1=$("#pwd1").val();
+	var pwd2=$("#pwd2").val();
+	if(pwd1==null||pwd2==null||pwd1.trim()==""){alert("密码不能为空!");return;}else if(pwd1!=pwd2){alert("两次密码不一致!");return;}
+	var userid=$("#userid2").val();
+	
+		var existslocal=false;
+	jQuery.ajax({
+		type : "POST",
+		async : false,
+		url : "/admin/user/existsLocal",
+		data : {
+			userid : userid
+		},
+		dataType : 'json',
+		beforeSend : function() {
+		},
+		success : function(data) {
+			data=eval(data);
+			existslocal=data.result;
+		
+		}
+	});// end ajax	
+	
+	if(existslocal){
+	alert(userid+"已经是系统用户！");
+	return;
+	}
+	
+	
+	var nickname=$("#nickname2").val();
+	var email=$("#email2").val();
+	var phone=$("#phone2").val();
+	
+	if(userid==null || userid.trim()=="")
+	{
+		alert("用户ID不能为空.");
+		$("#userid").focus();
+		return;
+	}
+
+	jQuery.ajax({
+					        type:"POST",
+					        async: false,
+					        url:"/admin/user/add",
+					        data:{userid:userid,nickname:nickname,email:email,phone:phone,type:2,pwd1:pwd1},
+					        dataType : 'json',
+					        beforeSend:function(){
+					        },
+					        success:function(data){
+							window.location.reload();
+							
+					        }
+					});// end ajax
+
+	parent.closeDialog(1);
+});//提交
+
+
+
+$("#submitBtnE").click(function(){
+	//提交
+	var userid=$("#userid").val();
+	var nickname=$("#nickname").val();
+	var email=$("#email").val();
+	var phone=$("#phone").val();	
+	jQuery.ajax({
+					        type:"POST",
+					        async: false,
+					        url:"/admin/user/edit",
+					        data:{userid:userid,nickname:nickname,email:email,phone:phone},
+					        dataType : 'json',
+					        beforeSend:function(){
+					        },
+					        success:function(data){
+						
+							window.location.reload();
+							
+					        }
+					});// end ajax
+
+	parent.closeDialog(1);
+});//提交
+
+$("#resetBtn").click(function(){
+	//提交
+	var userid=$("#userid").val();
+	var newpwd="123456";
+	jQuery.ajax({
+					        type:"POST",
+					        async: false,
+					        url:"/admin/user/edit",
+					        data:{userid:userid,password:newpwd},
+					        dataType : 'json',
+					        beforeSend:function(){
+					        },
+					        success:function(data){
+							alert(userid+"的密码已经重置为"+newpwd);
+							window.location.reload();
+					        }
+					});// end ajax
+
+	parent.closeDialog(1);
+});//提交
+
+$("#submitBtnPwd").click(function(){
+	//提交
+	var pwd1=$("#pwd1").val();
+	var pwd2=$("#pwd2").val();
+	var pwd3=$("#pwd3").val();
+	if(pwd1==null||pwd1.trim()==""){
+	alert("原始密码不能为空!");return;
+	}
+	if(pwd2==null||pwd2.trim()==""||pwd3==null||pwd3.trim()==""){
+	alert("密码不能为空!");return;
+	}else if(pwd2!=pwd3){
+	alert("两次密码不一致!");return;
+	}
+	
+	var isvalidpwd=false;
+	jQuery.ajax({
+		type : "POST",
+		async : false,
+		url : "/admin/user/validpwd",
+		data : {
+			password : pwd1
+		},
+		dataType : 'json',
+		beforeSend : function() {
+		},
+		success : function(data) {
+			data=eval(data);
+			isvalidpwd=data.result;
+		
+		}
+	});// end ajax	
+	
+	if(!isvalidpwd){
+	alert("原始密码错误!");
+	return;
+	}
+	
+	
+	
+	jQuery.ajax({
+					        type:"POST",
+					        async: false,
+					        url:"/admin/user/edit",
+					        data:{password:pwd2},
+					        dataType : 'json',
+					        beforeSend:function(){
+					        },
+					        success:function(data){
+							window.location.reload();
+					        }
+					});// end ajax
+
+	parent.closeDialog(1);
+});//提交
+
+
+
+$("#cancelBtn,#cancelBtn2").click(function(){
+//取消
+	parent.closeDialog(0);
+});
+
+
+//校验用户
+$("#querybutton").click(function()
+{
+	var userid=$("#userid").val();
+	//alert(userid);
+	if(userid==null ||userid==""){return;}
+	//alert("here1");
+	var existslocal=false;
+	jQuery.ajax({
+		type : "POST",
+		async : false,
+		url : "/admin/user/existsLocal",
+		data : {
+			userid : userid
+		},
+		dataType : 'json',
+		beforeSend : function() {
+		},
+		success : function(data) {
+			data=eval(data);
+			existslocal=data.result;
+		
+		}
+	});// end ajax	
+	
+	if(existslocal){
+	alert(userid+"已经是系统用户！");
+	return;
+	}
+	
+	jQuery.ajax({
+		type : "POST",
+		async : false,
+		url : "/admin/user/exists",
+		data : {
+			userid : userid
+		},
+		dataType : 'json',
+		beforeSend : function() {
+		},
+		success : function(data) {
+			data=eval(data);
+			if(data.result=="true")
+			{
+				$("#useridbak").attr("value",data.userid);
+				$("#nickname").attr("value",data.nickname);
+				$("#email").attr("value",data.email);
+				$("#phone").attr("value",data.phone);
+				    
+			}
+			else
+			{
+				alert("发布器无此用户信息，请重新查询");
+			}
+		
+		}
+	});// end ajax	
+});//校验用户
+
+
+});//document ready
+</script>
+</head>
+<body>
+<div style="margin-left:5px;margin-left:5px;" >
+<input type="hidden" id="iconUri" value="$!{data.iconUri}"/>
+<input type="hidden" id="siconUri" value="$!{data.siconUri}"/>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:12px; text-align:left;" class="my_table_sty">
+       #if($op=="pwd")
+		<tr>
+          <td class="soft_info_title" width="150">原始密码：</td>
+             <td class="soft_info_value"><input type="password" name="pwd1" id="pwd1" value="" />&nbsp;</td>
+        </tr>
+		<tr>
+          <td class="soft_info_title" width="150">&nbsp;&nbsp;新密码：</td>
+             <td class="soft_info_value"><input type="password" name="pwd2" id="pwd2" value="" />&nbsp;</td>
+        </tr>
+		<tr>
+          <td class="soft_info_title" width="150">重复密码：</td>
+             <td class="soft_info_value"><input type="password" name="pwd3" id="pwd3" value="" />&nbsp;</td>
+        </tr>
+		<tr>
+		     <td colspan="2" align="center"><input type="button" id="submitBtnPwd" value="确定" class="in_button"/>
+          &nbsp;<input type="button" id="cancelBtn" value="取消" class="in_button"/> </td>
+        </tr>
+	   #else
+		#if($op=="add")
+		<tr>
+            <td colspan="2" align="left">
+				方式一:从发布器系统导入。
+		  </td>
+        </tr>
+		#end
+		
+		<tr>
+          <td class="soft_info_title" width="150">用户ID：</td>
+          <td class="soft_info_value">
+			#if($op=="add")
+			<input type="text" name="userid" id="userid" value=""/>&nbsp;
+			#elseif($op=="edit"||$op=="editinfo")
+			<input type="text" name="userid" id="userid" value="${userdata.userid}"  readonly/>&nbsp;
+			#end			
+			<input type="hidden" name="useridbak" id="useridbak" value=""/>&nbsp;
+			#if($op=="add")
+			<input type="button" name="" id="querybutton" value="查询" onclick="existsUser()"/>&nbsp;
+			#end
+		  </td>
+		</tr>
+       
+        <tr>
+		 
+          <td class="soft_info_title" width="150">昵称：</td>
+		 
+		  #if($op=="add")
+          <td class="soft_info_value"><input type="text" name="nickname" id="nickname" value=""/>&nbsp;</td>
+		  #elseif($op=="edit"||$op=="editinfo")
+		  <td class="soft_info_value"><input type="text" name="nickname" id="nickname" value="${userdata.nickname}" />&nbsp;</td>
+		  #end
+         
+        </tr>
+		<tr>
+          <td class="soft_info_title" width="150">Email：</td>
+		   #if($op=="add")
+             <td class="soft_info_value"><input type="text" name="email" id="email" value="" />&nbsp;</td>
+		  #elseif($op=="edit"||$op=="editinfo")
+		     <td class="soft_info_value"><input type="text" name="email" id="email" value="${userdata.email}"/>&nbsp;</td>
+		  #end
+      
+        </tr>
+		<tr>
+          <td class="soft_info_title" width="150">电话：</td>
+		  #if($op=="add")
+             <td class="soft_info_value"><input type="text" name="phone" id="phone" value=""/>&nbsp;</td>
+		  #elseif($op=="edit"||$op=="editinfo")
+		     <td class="soft_info_value"><input type="text" name="phone" id="phone" value="${userdata.phone}"/>&nbsp;</td>
+		  #end
+         
+        </tr>
+        <tr>
+			 <td colspan="2" align="center">
+			#if($op=="edit"&&${userdata.type}=="2")
+				<input type="button" id="resetBtn" value="重置密码" class="in_button"/>
+			#end
+			#if($op=="add")
+           <input type="button" id="submitBtn" value="确定" class="in_button"/>
+		  #elseif($op=="edit"||$op=="editinfo")
+		     <input type="button" id="submitBtnE" value="确定" class="in_button"/>
+		  #end
+          &nbsp;<input type="button" id="cancelBtn" value="取消" class="in_button"/> </td>
+        </tr>
+		
+		#if($op=="add")
+		<tr>
+            <td colspan="2" align="left">
+				方式二:添加兼职帐号。
+		  </td>
+        </tr>
+		<tr>
+          <td class="soft_info_title" width="150">用户ID：</td>
+          <td class="soft_info_value">
+			<input type="text" name="userid2" id="userid2" value=""/>&nbsp;
+		  </td>
+		</tr>
+        
+        <tr>
+		 
+          <td class="soft_info_title" width="150">昵称：</td>
+          <td class="soft_info_value"><input type="text" name="nickname2" id="nickname2" value=""/>&nbsp;</td>      
+        </tr>
+		<tr>
+          <td class="soft_info_title" width="150">Email：</td>
+             <td class="soft_info_value"><input type="text" name="email2" id="email2" value="" />&nbsp;</td>
+        </tr>
+		<tr>
+          <td class="soft_info_title" width="150">电话：</td>
+             <td class="soft_info_value"><input type="text" name="phone2" id="phone2" value=""/>&nbsp;</td>
+        </tr>
+		
+		<tr>
+          <td class="soft_info_title" width="150">密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+             <td class="soft_info_value"><input type="password" name="pwd1" id="pwd1" value=""/>&nbsp;</td>
+        </tr>
+		
+		<tr>
+          <td class="soft_info_title" width="150">确认密码：</td>
+             <td class="soft_info_value"><input type="password" name="pwd2" id="pwd2" value=""/>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><input type="button" id="submitBtn2" value="确定" class="in_button"/>
+          &nbsp;<input type="button" id="cancelBtn2" value="取消" class="in_button"/> </td>
+        </tr>
+		#end ##add
+	   #end ##pwd
+      </table>
+</div>
+</body>
+</html>

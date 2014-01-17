@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Test Returned View Page</title>
+</head>
+<body>
+Hello world $info
+<!--#set($name="blue") 
+#test($name)-->
+</body>
+</html>

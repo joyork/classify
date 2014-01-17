@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings useStatementNamespaces="true" />
+<!-- 	<sqlMap resource="ibatis/user_info.xml" /> -->
+	<sqlMap resource="ibatis/coin_balance.xml" />
+	<sqlMap resource="ibatis/device_assist_history.xml" />
+	<sqlMap resource="ibatis/device_record.xml" />
+ 	<sqlMap resource="ibatis/device.xml" />
+	<sqlMap resource="ibatis/phone_model.xml" />
+	<sqlMap resource="ibatis/recommend_app.xml" />
+	<sqlMap resource="ibatis/sequence.xml" />
+	<sqlMap resource="ibatis/user.xml" />
+</sqlMapConfig>

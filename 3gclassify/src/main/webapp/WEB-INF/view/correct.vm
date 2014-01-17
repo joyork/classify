@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>中文文本分类-人工标注</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="baiyw">
+
+    <!-- Le styles -->
+    <link href="./resources/styles/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      label {
+      	display:inline;
+      }
+    </style>
+    <link href="./resources/styles/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="./resources/scripts/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./resources/img/newsapp_144_2.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./resources/img/newsapp_114_2.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./resources/img/newsapp_72_2.png">
+    <link rel="apple-touch-icon-precomposed" href="./resources/img/newsapp_57_2.png">
+    <link rel="shortcut icon" href="./resources/img/newsapp_16_2.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+		<div class="container">
+			<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="brand" style="color:#FFFFFF;" href="">网易移动中心</a>
+			<div class="nav-collapse collapse">
+	            <ul class="nav">
+	              <li><a href="./demo.html">首页</a></li>
+	              <li class="active"><a href="./correct">人工标注</a></li>
+	            </ul>
+			</div>
+			<!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+		<div class="hero-unit">
+			<!-- 简介 -->
+			<h1>人工标注</h1>
+	        <br>
+	        <p>
+	        	人工标注语料可以帮助机器在进行文本分类的模型学习过程中达到更好的准确度。<br>
+	        </p>
+			<p>采用20000余篇中文新闻内容，基于机器学习算法进行朴素贝叶斯训练，得出了中文文本分类模型。<br>
+	        	测试阶段支持对 <abbr title="财经股票">财经</abbr>、 <abbr title="科技">IT</abbr>、
+	        	<abbr title="卫生医疗">健康</abbr>、 <abbr title="体育">体育</abbr>、
+	        	<abbr title="旅游">旅游</abbr>、 <abbr title="教育">教育</abbr>、 <abbr title="招聘">招聘</abbr>、
+	        	<abbr title="文化">文化</abbr>、 <abbr title="军事">军事</abbr> 主题的新闻文本进行分类。<br>
+        	</p>
+			<br>
+			
+			<!-- 文本输入框 -->
+			<div class="row">
+				<div class="span1 text-right">
+					<label>人工标注:</label>
+				</div>
+				<div class="span3">
+					<select id="target" name="target" onchange="changeTarget();">
+					  <option id="defaultTarget" value="" selected="selected">-请选择-</option>
+					#foreach($each in $labels)
+					  <option value="${each}">${each}</option>
+					#end
+					</select>
+				</div>
+				<div class="span1 text-right">
+					<label>机器分类:</label>
+				</div>
+				<div class="span3">
+					<select id="label" name="label">
+					  <option id="defaultLabel" value="" selected="selected">-可选-</option>
+					#foreach($each in $labels)
+					  <option value="${each}" #if(${label}==${each})selected="selected"#end>${each}</option>
+					#end
+					</select>
+				</div>
+			</div>
+			
+			<textarea id="content" class="input-block-level" rows="9" onfocus="hideWarning();"
+				placeholder="在此输入需要分类的文本">$!{content}</textarea>
+
+			<!-- 触发显示对话框的按钮 -->
+			<div class="row" >
+				<div class="span3">
+					<button id="submitBtn" type="button" data-toggle="modal" data-target="#myModal"
+						class="btn btn-large btn-primary">提交</button>
+					<button id="clear" type="button" class="btn btn-large" onclick="clearContent();">重置</button>
+				</div>
+				<!-- 警告文本提示 -->
+				<div class="span4"> 
+					<div class="alert alert-error hide" style="margin:0px;padding:5px 35px 5px 14px;" 
+						onclick="hideWarning();">
+					  <strong>注意！</strong> 尚未输入文本。
+					</div>
+				</div>
+			</div>
+		</div>
+	  	
+	  	<!-- 隐藏部分 -->	
+		<div class="row">
+			<!-- 对话框 -->
+			<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 id="myModalLabel">感谢提交</h4>
+			  </div>
+			  <div class="modal-body text-center"><h3>您的标注在经过人工审核之后会进入训练集</h3></div>
+			  <div class="modal-footer text-center">
+				<button class="btn btn-primary" data-dismiss="modal" >确定</button>
+			  </div>
+			</div>
+		</div>
+	  
+		<hr>
+		
+		<!-- 底部 -->
+	    <footer class="brand text-center">
+	    	<p> © Netease Mobile Internet Department 2014</p>
+	    </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./resources/scripts/jquery.js"></script>
+	<script src="./resources/scripts/bootstrap/bootstrap.js"></script>
+
+	<script>
+	$(document).ready(function(){
+	  $('#target').tooltip({
+    	animation: true,
+    	placement: "top",
+    	title: "请标注",
+	    trigger: "manual",
+    	delay: { show: 0, hide: 100 }
+      });
+	  $('#target').tooltip('show');
+	});
+
+	function hideWarning(){
+		$('.alert').hide();
+	}
+	function changeTarget(){
+		$('#target').tooltip('hide');
+	}
+	function clearContent(){
+		$('#content').val('');
+	}
+
+	$('#myModal').on('show', function (e) {
+		$('#submitBtn').tooltip('hide');
+		var content = $("#content").val();
+		var target = $("#target").val();
+		
+		if(content.trim()=='' || target==''){
+			$('.alert').show();
+			return e.preventDefault();
+		}else{
+			jQuery.ajax({
+				type : "POST",
+				async : false,
+				url : "/3gclassify/manual",
+				data : {
+					content:content,
+					target:target
+				},
+				dataType : 'json',
+				beforeSend : function() {
+				},
+				success : function(data) {
+
+					if(data.success=="true")
+					{
+					}
+					else
+					{
+						alert("操作失败.");
+					}
+				},
+				error:function(){
+					alert("网络异常,请刷新页面.");
+				}
+			});// end of ajax
+		}
+
+	})
+	
+	</script>
+  
+</body></html>

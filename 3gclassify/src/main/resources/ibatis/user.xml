@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="User">
+
+    <typeAlias alias="user" type="com.netease.flowgame.pojo.User" />
+
+   
+    <sql id="users">
+       select userid, nickname, email, phone, status, type, password
+		from user
+   </sql>
+   
+   <select id="selectAllUser" resultClass="user">
+		<include refid="users" />
+	</select>
+
+    <select id="selectUserById" resultClass="user" parameterClass="java.lang.String">
+        <include refid="users" />
+        where userid = #id#
+    </select>
+    
+    
+    <select id="selectUserCount" resultClass="java.lang.Integer" parameterClass="java.util.Map">
+		select count(1) from user
+		<dynamic prepend="">
+			<isNotEmpty property="username" prepend="where">
+				nickname like
+				#username#
+    		</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="selectUserList" resultClass="user" parameterClass="java.util.Map">
+		<include refid="users"/>
+			
+		<dynamic prepend="">
+			<isNotEmpty property="username" prepend="where">
+				nickname like
+				#username#
+    		</isNotEmpty>
+    		<isNotEmpty property="orderby">
+    			order by $orderby$ $seq$
+    		</isNotEmpty>
+    		<isNotEmpty property="pageSize">
+    			limit #start#,#pageSize#
+    		</isNotEmpty>
+		</dynamic>
+	</select>
+    
+    <insert id="insertUser" parameterClass="user" >
+    	insert into user(userid, password, nickname, email, phone, type)
+    	values(#userid#, #password#, #nickname#, #email#, #phone#, #type#)
+    </insert>
+    
+    <update id="updateUser" parameterClass="user">
+    	update user set nickname=#nickname#,email=#email#,phone=#phone#,status=#status#,password=#password# 
+    	where userid=#userid#
+    </update>
+    
+    <delete id="deleteUserById" parameterClass="java.lang.String">
+		delete from user where userid=#userid#
+	</delete>
+
+</sqlMap>
