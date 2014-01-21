@@ -181,7 +181,7 @@
 			jQuery.ajax({
 				type : "POST",
 				async : false,
-				url : "/3gclassify/manual",
+				url : "./manual",
 				data : {
 					content:content,
 					target:target

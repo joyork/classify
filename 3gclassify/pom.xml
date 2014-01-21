@@ -14,6 +14,7 @@
 	</properties>
 	
 	<dependencies>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -54,22 +55,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
-			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
 		<dependency>
@@ -84,11 +70,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
@@ -97,11 +78,33 @@
 			<artifactId>aopalliance</artifactId>
 			<version>1.0</version>
 		</dependency>
-<!-- <dependency> -->
-<!--     <groupId>org.springframework.security</groupId> -->
-<!--     <artifactId>spring-security-core</artifactId> -->
-<!--     <version>3.0.7.RELEASE</version> -->
-<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+
+
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-core</artifactId>
+		    <version>3.0.7.RELEASE</version>
+		</dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
@@ -117,11 +120,7 @@
 			<artifactId>velocity-tools</artifactId>
 			<version>2.0</version>
 		</dependency>
-		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.1.2</version>
-		</dependency>
+<!-- 
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
@@ -167,6 +166,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+ -->
 		<dependency>
 			<groupId>quartz</groupId>
 			<artifactId>quartz</artifactId>
@@ -174,12 +174,18 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+ 		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
-		<!-- <dependency>
+<!-- 	
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.6.1</version>
@@ -192,7 +198,7 @@
 			<version>1.6.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
-		</dependency> -->
+		</dependency> 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-ibatis</artifactId>
@@ -206,6 +212,7 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+-->
 		<dependency>
 			<groupId>org.apache.mahout</groupId>
 			<artifactId>mahout-core</artifactId>

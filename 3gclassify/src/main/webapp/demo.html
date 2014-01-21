@@ -220,6 +220,7 @@
 	  });
 
 	});
+
 	function correct(){
 		var vform = document.getElementById("correctForm");
 		var content = $('#content').val();
@@ -239,9 +240,7 @@
 	function hideWarning(){
 		$('.alert').hide();
 	}
-	function clickDown(){
-		$('#startBtn').button('loading');
-	 }
+
 	function clickStart(){
 		$('#startBtn').button('loading');
 		$('#startBtn').tooltip('hide');
@@ -252,11 +251,36 @@
 		$('#startBtn').button('reset');
 		$('#startBtn').tooltip('hide');
 	}
-
+	var idset = new Array();
+	function isExist(id){
+		if(idset.length==0){
+			return -1;
+		}
+		for(var i=0;i<idset.length;i++){
+		if(id == idset[i])
+			return i;
+		}
+		return -1;
+	}
+    function rand(num) {
+        var randid = parseInt(Math.random() * num + 1);
+        while(isExist(randid)>-1){
+        	randid = parseInt(Math.random() * num + 1);
+        }
+        idset.push(randid);
+        return randid;
+    }
+	function makefontsize(score){
+		var seed = parseInt(score*2);
+		if(seed>26){
+			seed=26;
+		}
+		return seed+4;
+	}
 	$('#myModal').on('show', function (e) {
 
 		var content = $("#content").val();
-		
+		content = content.replace(/:/g," ");
 		if(content.trim()==''){
 			$('.alert').show();
 			$('#startBtn').button('reset');
@@ -265,7 +289,7 @@
 			jQuery.ajax({
 				type : "POST",
 				async : false,
-				url : "/3gclassify/classify",
+				url : "./classify",
 				data : {
 					content:content
 				},
@@ -275,17 +299,37 @@
 				success : function(data) {
 
 					if(data.success=="true")
-					{
-						$('#myModal .modal-body').html('<h2>'+data.label+'</h2>');
+					{	
+						var ctxt = '<h1>'+data.label+'</h1>';
+						ctxt += '<div class="text-center row" style="line-height:30px;margin:30px 0px 30px;">';
+						ctxt += '<div class="span3 offset1">';
+						
+						var wordScore = data.wordScore;
+						var topWords = data.topWords;
+						var edge = 100;
+						if(topWords.length<100){
+							edge = topWords.length-1;
+						}
+						for(var k=0;k<20 && k<topWords.length;k++){
+							var rindex = rand(edge);
+							var rword = topWords[rindex];
+							var score = wordScore[rword];
+							ctxt += ' <abbr title="'+score+'" value="'+rindex+'" style="font-size:'+ makefontsize(score)+'px;">'+rword+'</abbr> ';
+						}
+
+						ctxt += '</div></div>'
+						$('#myModal .modal-body').html(ctxt);
 						$('#correctForm #label').val(data.label);
 					}
 					else
 					{
 						alert("操作失败.");
+						return e.preventDefault();
 					}
 				},
 				error:function(){
 					alert("网络异常,请刷新页面.");
+					return e.preventDefault();
 				}
 			});// end of ajax
 		}
@@ -294,6 +338,7 @@
 	
 	$('#myModal').on('shown', function (e) {		
 		$('#startBtn').button('reset');
+		idset.length=0;
 	})
 	</script>
   

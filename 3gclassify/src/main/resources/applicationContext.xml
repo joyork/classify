@@ -22,7 +22,7 @@
     
 	<context:component-scan base-package="com.netease.news" />
 
-	<!-- 数据库配置begin -->
+	<!-- 数据库配置begin 	-->
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
@@ -40,6 +40,7 @@
 		<property name="maxIdleTime" value="${jdbc.maxIdleTime}" />
 		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}" />
 	</bean>
+
 	<!-- main主数据源 -->
 	<bean id="mainMasterDataSource" parent="parentDataSource">
 		<property name="driverClass" value="${main.master.jdbc.driverClass}" />
@@ -54,6 +55,7 @@
 		<property name="user" value="${main.slave.jdbc.user}" />
 		<property name="password" value="${main.slave.jdbc.password}" />
 	</bean>
+
 	<!-- 用于动态选择主、从数据库的数据源实现
 	<bean id="dataSource" class="com.netease.flowgame.aop.DynamicDataSource">
 		<property name="targetDataSources">

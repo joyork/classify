@@ -71,10 +71,9 @@ public class NewsClassifier {
 		Map<String,Object> result = this.classify(content);
 		if(result!=null){
 			System.out.println(result.get("label")+" "+result.get("score"));
-			Map<String,Double> wordvalue = (Map<String,Double>)result.get("wordScore");
-			List<Map.Entry<String,Double>> wordlist = insertSortEntry(wordvalue);
+
+			List<Map.Entry<String,Double>> wordlist = (List<Map.Entry<String,Double>>)result.get("wordScoreList");
 			for(Map.Entry<String,Double> entry : wordlist){
-				
 				System.out.println(entry.getKey()+" "+entry.getValue()); 
 			}
 		}else{
@@ -116,10 +115,10 @@ public class NewsClassifier {
 			classifier = loadClassifier(conf);
 			Vector tfVector = generateTFVector(text);
 			Vector tfidfVector = generateTFIDFVector(tfVector);
-			Map<String,Double> enmap = new HashMap<String,Double>();
+			Map<String,Double> wordScoreMap = new HashMap<String,Double>();
 //			Map<String,Map<String,Integer>> smap = new TreeMap<String,Map<String,Integer>>();
 		    for (Element e : tfidfVector.nonZeroes()) {
-		       enmap.put(inverseDic.get(e.index()), e.get());
+		       wordScoreMap.put(inverseDic.get(e.index()), e.get());
 		    }
 			Vector r = classifier.classifyFull(tfidfVector);
 			Path labelIndexPath = new Path(DIR_PATH+"labelIndex");
@@ -136,11 +135,20 @@ public class NewsClassifier {
 					bestIdx = element.index();
 				}
 			}
-
+			List<Map.Entry<String,Double>> wordScoreList = insertSortEntry(wordScoreMap);
+			List<String> topWords = new ArrayList<String>();
+			for(Map.Entry<String,Double> entry : wordScoreList){
+				topWords.add(entry.getKey());
+				if(topWords.size()>100) {
+					break;
+				}
+			}
 			if (bestIdx != Integer.MIN_VALUE) {
 				result.put("label", labelMap.get(bestIdx));
 				result.put("score", bestScore);
-				result.put("wordScore", enmap);
+				result.put("wordScore", wordScoreMap);
+				result.put("wordScoreList", wordScoreList);
+				result.put("topWords", topWords);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

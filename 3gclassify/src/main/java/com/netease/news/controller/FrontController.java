@@ -52,6 +52,8 @@ public class FrontController {
 			HttpServletRequest request) {
 		String label = "";
 		double score = 0;
+		List<String> topWords = null;
+		List<Map.Entry<String,Double>> wordScoreList = null;
 		Map<String,Double> wordscore = null;
 		NewsClassifier classifier = new NewsClassifier();
 		System.out.println("c:"+content); 
@@ -60,6 +62,8 @@ public class FrontController {
 		if(result!=null){
 			label = (String)result.get("label");
 			score = (Double)result.get("score");
+			topWords = (List<String>)result.get("topWords");
+			wordScoreList = (List<Map.Entry<String,Double>>)result.get("wordScoreList");
 			wordscore = (Map<String,Double>)result.get("wordScore");
 		}else{
 			label = "No result" ;
@@ -68,6 +72,8 @@ public class FrontController {
 		map.put("label", labelMap.getValue(label));
 		map.put("score", score);
 		map.put("wordScore", wordscore);
+		map.put("topWords", topWords);
+		map.put("wordScoreList",wordScoreList);
 		map.put("success", "true");
 		return map;
 
