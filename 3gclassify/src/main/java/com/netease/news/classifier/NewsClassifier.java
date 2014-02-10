@@ -54,11 +54,12 @@ public class NewsClassifier {
 	
 	public void classifyDocument(String filename){
 		String content = null;
+		BufferedReader reader = null;
 		try {
 			ClassLoader loader = this.getClass().getClassLoader();
 			InputStream in=loader.getResourceAsStream(filename);
 			StringBuffer sb = new StringBuffer();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+			reader = new BufferedReader(new InputStreamReader(in,"UTF-8"));
 			String line = null;
 			while((line=reader.readLine())!=null){
 				sb.append(line);
@@ -67,6 +68,14 @@ public class NewsClassifier {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (IOException ioe) {
+				// ignore
+			}
 		}
 		Map<String,Object> result = this.classify(content);
 		if(result!=null){
@@ -160,8 +169,7 @@ public class NewsClassifier {
 
 	private AbstractNaiveBayesClassifier loadClassifier(Configuration conf)
 			throws IOException {
-		Path modelPath = new Path(DIR_PATH+"model");
-		NaiveBayesModel model = NaiveBayesModel.materialize(modelPath, conf);
+		NaiveBayesModel model = NaiveBayesModel.materialize(new Path(DIR_PATH+"model"),conf);
 		AbstractNaiveBayesClassifier classifier = new ComplementaryNaiveBayesClassifier(
 				model);
 		return classifier;
@@ -175,7 +183,7 @@ public class NewsClassifier {
 		Path dfcountfile = new Path(DIR_PATH+"df-part");
 	      long featureCount = 0;
 	      long vectorCount = Long.MAX_VALUE;
-
+//	      new SequenceFileDirIterable<IntWritable,LongWritable>(dfcountfile,PathType.GLOB,null,null,true,conf);
 	      for (Pair<IntWritable,LongWritable> record
 	           : new SequenceFileDirIterable<IntWritable,LongWritable>(dfcountfile,
 	                                                                   PathType.GLOB,

@@ -15,11 +15,6 @@
 	<mvc:annotation-driven />
 
 	<!-- for resource -->
-	<mvc:resources location="/admin/styles/" mapping="/admin/styles/**" />
-	<mvc:resources location="/admin/scripts/" mapping="/admin/scripts/**" />
-	<mvc:resources location="/admin/images/" mapping="/admin/images/**" />
-	<mvc:resources location="/admin/" mapping="/admin/*.html" />
-	<mvc:resources location="/404.html" mapping="/404.html" />
     <mvc:resources location="/*.html" mapping="/*.html" />
     <mvc:resources location="/resources/" mapping="/resources/**" />
 	<!-- for velocity -->

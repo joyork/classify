@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>中文文本分类-人工标注</title>
+    <title>新闻分类器-人工标注</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="baiyw">
@@ -26,11 +26,11 @@
     <![endif]-->
 
     <!-- Fav and touch icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./resources/img/newsapp_144_2.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./resources/img/newsapp_114_2.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./resources/img/newsapp_72_2.png">
-    <link rel="apple-touch-icon-precomposed" href="./resources/img/newsapp_57_2.png">
-    <link rel="shortcut icon" href="./resources/img/newsapp_16_2.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./resources/img/favicon_144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./resources/img/favicon_114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./resources/img/favicon_72.png">
+    <link rel="apple-touch-icon-precomposed" href="./resources/img/favicon_57.png">
+    <link rel="shortcut icon" href="./resources/img/favicon_16.png">
   </head>
 
   <body>
@@ -43,10 +43,10 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="brand" style="color:#FFFFFF;" href="">网易移动中心</a>
+			<a class="brand" style="color:#FFFFFF;" href="#">新闻分类器</a>
 			<div class="nav-collapse collapse">
 	            <ul class="nav">
-	              <li><a href="./demo.html">首页</a></li>
+	              <li><a href="./index.html">首页</a></li>
 	              <li class="active"><a href="./correct">人工标注</a></li>
 	            </ul>
 			</div>
@@ -136,7 +136,7 @@
 		
 		<!-- 底部 -->
 	    <footer class="brand text-center">
-	    	<p> © Netease Mobile Internet Department 2014</p>
+	    	<p>Baiyawen @ 2014</p>
 	    </footer>
 
     </div> <!-- /container -->

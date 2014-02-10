@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.netease.news</groupId>
-	<artifactId>3gclassify</artifactId>
+	<artifactId>newsclassify</artifactId>
 	<packaging>war</packaging>
 	<version>1.0</version>
 	<name>3gclassify Maven Webapp</name>
@@ -22,26 +22,11 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+<!--  -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aspects</artifactId>
-			<version>${springframework.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>spring-test</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-asm</artifactId>
-		    <version>${springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -65,14 +50,34 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
+		
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${springframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>spring-test</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-asm</artifactId>
+		    <version>${springframework.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
@@ -166,7 +171,6 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
- -->
 		<dependency>
 			<groupId>quartz</groupId>
 			<artifactId>quartz</artifactId>
@@ -184,7 +188,7 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
-<!-- 	
+	
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -319,39 +323,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-dependency-plugin
-										</artifactId>
-										<versionRange>[2.1,)</versionRange>
-										<goals>
-											<goal>copy-dependencies</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+
 	</build>
 </project>

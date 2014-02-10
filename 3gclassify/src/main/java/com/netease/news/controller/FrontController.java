@@ -8,16 +8,16 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
-import org.apache.mahout.classifier.ClassifierResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.netease.news.classifier.NewsClassifier;
+import com.netease.news.classifier.ModelDeserialClassifier;
 import com.netease.news.utils.PropertyLoader;
+
 
 @Controller
 @RequestMapping("/")
@@ -25,28 +25,26 @@ public class FrontController {
 	
 	private static PropertyLoader labelMap = new PropertyLoader("labelmap.properties");
 
-	private Logger logger = Logger.getLogger(this.getClass());
-	
-	@RequestMapping(value = "test")
+	private ModelDeserialClassifier modelClassifier = new ModelDeserialClassifier();
+
+	@RequestMapping(value = "test",method=RequestMethod.GET)
 	public ModelAndView test(@RequestParam(value = "content", required = false) String content) {
 		ModelAndView mv = new ModelAndView("test");
 		String info = "failed";
-		NewsClassifier classifier = new NewsClassifier();
 		System.out.println("c:"+content); 
-		Map<String,Object> result = classifier.classify(content);
+		Map<String,Object> result = modelClassifier.classify(content);
 		if(result!=null){
 			info = result.get("label")+" "+result.get("score"); 
 		}else{
 			info = "No result" ;
 		}
 		System.out.println("info:"+info);
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("info", info);
+
 		mv.addObject("info",info);
 		return mv;
 	}
 
-	@RequestMapping(value = "classify")
+	@RequestMapping(value = "classify",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> classify(@RequestParam(value = "content", required = false) String content,
 			HttpServletRequest request) {
@@ -55,9 +53,8 @@ public class FrontController {
 		List<String> topWords = null;
 		List<Map.Entry<String,Double>> wordScoreList = null;
 		Map<String,Double> wordscore = null;
-		NewsClassifier classifier = new NewsClassifier();
 		System.out.println("c:"+content); 
-		Map<String,Object> result = classifier.classify(content);
+		Map<String,Object> result = modelClassifier.classify(content);
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result!=null){
 			label = (String)result.get("label");
@@ -75,6 +72,7 @@ public class FrontController {
 		map.put("topWords", topWords);
 		map.put("wordScoreList",wordScoreList);
 		map.put("success", "true");
+
 		return map;
 
 	}
@@ -84,9 +82,9 @@ public class FrontController {
 	public ModelAndView correct(@RequestParam(value = "content", required = false) String content,
 			@RequestParam(value = "label", required = false) String label) {
 		ModelAndView mv = new ModelAndView("correct");
-		String labels = "≤∆æ≠°¢IT°¢Ω°øµ°¢ÃÂ”˝°¢¬√”Œ°¢ΩÃ”˝°¢’–∆∏°¢ŒƒªØ°¢æ¸ ¬";
+		String labels = "Ë¥¢Áªè„ÄÅIT„ÄÅÂÅ•Â∫∑„ÄÅ‰ΩìËÇ≤„ÄÅÊóÖÊ∏∏„ÄÅÊïôËÇ≤„ÄÅÊãõËÅò„ÄÅÊñáÂåñ„ÄÅÂÜõ‰∫ã";
 		List<String> labelList = new ArrayList<String>();
-		labelList = Arrays.asList(labels.split("°¢"));
+		labelList = Arrays.asList(labels.split("„ÄÅ"));
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("content", content);
 		map.put("label", label);
@@ -95,17 +93,12 @@ public class FrontController {
 		return mv;
 	}
 	
-	@RequestMapping(value = "manual")
+	@RequestMapping(value = "manual",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> manual(@RequestParam(value = "content", required = false) String content,
 			@RequestParam(value = "target", required = false) String target) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		if(content!=null && target!=null){
-			logger.info("##c##"+content+"##t##"+target);
-		}else{
-			logger.info("invalid manual labeled"); 
-		}
 
 		map.put("success", "true");
 		return map;
