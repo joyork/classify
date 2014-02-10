@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>新闻分类器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="baiyw">
+
+    <!-- Le styles -->
+    <link href="./resources/styles/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <link href="./resources/styles/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="./resources/scripts/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./resources/img/favicon_144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./resources/img/favicon_114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./resources/img/favicon_72.png">
+    <link rel="apple-touch-icon-precomposed" href="./resources/img/favicon_57.png">
+    <link rel="shortcut icon" href="./resources/img/favicon_16.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+		<div class="container">
+			<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="brand" style="color:#FFFFFF;" href="#">新闻分类器</a>
+			<div class="nav-collapse collapse">
+	            <ul class="nav">
+	              <li class="active"><a href="./index.html">首页</a></li>
+	              <li><a href="./correct">人工标注</a></li>
+	            </ul>
+			</div>
+			<!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+		<div class="hero-unit">
+			<!-- 简介 -->
+			<h1>中文文本分类</h1>
+	        <br>
+	        <p>
+	        	文本分类是指按照预先定义的主题类别,为文档集合中的每个文档确定一个类别,是文本挖掘的一个重要内容。<br>
+	        </p>
+			<p>采用20000余篇中文新闻内容，基于机器学习算法进行朴素贝叶斯训练，得出了中文文本分类模型。<br>
+	        	测试阶段支持对 <abbr title="财经股票">财经</abbr>、 <abbr title="科技">IT</abbr>、
+	        	<abbr title="卫生医疗">健康</abbr>、 <abbr title="体育">体育</abbr>、
+	        	<abbr title="旅游">旅游</abbr>、 <abbr title="教育">教育</abbr>、 <abbr title="招聘">招聘</abbr>、
+	        	<abbr title="文化">文化</abbr>、 <abbr title="军事">军事</abbr> 主题的新闻文本进行分类。<br>
+        	</p>
+			<br>
+			
+			<!-- 文本输入框 -->
+			<textarea id="content" class="input-block-level" rows="9" onfocus="hideWarning();"
+				placeholder="在此输入需要分类的文本"></textarea>
+
+			<!-- 触发显示对话框的按钮 -->
+			<div class="row" >
+				<div class="span3">
+					<button id="startBtn" type="button" onclick="clickStart();" data-toggle="modal" data-target="#myModal" 
+						class="btn btn-large btn-primary" data-loading-text="加载中...">开始分类</button>
+					<!-- <a id="startBtn" href="#myModal" role="button" class="btn btn-large btn-primary" 
+						data-toggle="modal" data-loading-text="加载中...">开始分类</a> -->
+					<button id="clear" type="button" class="btn btn-large " 
+						onclick="clearContent();">清空</button>
+				</div>
+				<!-- 警告文本提示 -->
+				<div class="span4"> 
+					<div class="alert alert-error hide" style="margin:0px;padding:5px 35px 5px 14px;" onclick="hideWarning();">
+					  <strong>注意！</strong> 尚未输入文本。
+					</div>
+				</div>
+			</div>
+		</div>
+        <hr>
+
+		<!-- 旋转木马 -->			
+		<div id="myCarousel" class="carousel slide" style="margin:0 50px 0;line-height:1.5">
+			<ol class="carousel-indicators" style="li{background-color:#949494;};.active{background-color:#cfcfcf}">
+				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+				<li data-target="#myCarousel" data-slide-to="2"></li>
+			</ol>
+			<!-- 旋转木马项目 -->
+			<div class="carousel-inner">
+				<div class="active item">
+					<div class="row">
+						<div class="span3 offset1">
+				        	<h2>财经</h2>
+				        	<p id="text">西部证券认为，随着IPO的重启，市场供求关系紧张状态加剧，资金面压力加大的背景下，A股上周运行重心持续下移，沪指2000点大关面临严峻考验，盘中不乏部分做多热点，更多依赖于存量资金运作，量能持续低迷的状态表明场外资金驰援意愿不强。</p>
+				        	<p><a class="btn tryBtn"><i class="icon-arrow-up"></i> 试一试 </a></p>
+						</div>
+						<div class="span3">
+				        	<h2>IT</h2>
+				        	<p id="text">目前，惠普和联想已经宣布推出了面向个人和企业用户的Android桌面电脑。华硕推出了运行Windows 8.1和Android 4.2.2双系统的笔记本电脑Transformer Book Duet，允许用户一键切换操作系统。AMD则在整合双系统上花费了更大的心思。</p>
+				        	<p><a class="btn tryBtn"><i class="icon-arrow-up"></i> 试一试 </a></p>
+						</div>
+						<div class="span3">
+				        	<h2>健康</h2>
+				        	<p id="text">美国匹兹堡大学精神病学及临床医学教授丹尼尔·比斯说，就平均睡眠时间来说，女性更长，所以她们看起来更健康。但女性也更倾向于对自己的睡眠不满，抱怨难以入睡且睡不够。相比之下，男性夜晚醒来的次数更多，这可能是因为男性打鼾的比例较高。</p>
+				        	<p><a class="btn tryBtn"><i class="icon-arrow-up"></i> 试一试</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="item">
+					<div class="row">
+						<div class="span3 offset1">
+				        	<h2>体育</h2>
+				        	<p id="text">自2年前以700万英镑的身价从根克转投以来，德布劳内在切尔西亮相的机会极少，他先是回到根克度过了18个月的租借期，随后又被外租至不莱梅。在效力不莱梅期间，德布劳内表现出了出众的状态，今夏被切尔西召回。然而德布劳内上场机会寥寥。</p>
+				        	<p><a class="btn tryBtn"><i class="icon-arrow-up"></i> 试一试 </a></p>
+						</div>
+						<div class="span3">
+				        	<h2>旅游</h2>
+				        	<p id="text">冬季不仅仅应该有热红酒、冰上运动和圣诞集市，还应该有一段别致的旅途，通往白雪皑皑的隆冬仙境。来跟随我们看看世界十大冬季旅游胜地吧。在这些地方，无论是光怪陆离的冰雕还是奇幻壮丽的北极光无疑都让这个寒冷的季节大放异彩。</p>
+				        	<p><a class="btn tryBtn"><i class="icon-arrow-up"></i> 试一试</a></p>
+						</div>
+						<div class="span3">
+				        	<h2>教育</h2>
+				        	<p id="text">为提升学历而中断就业考研短期内并不能变成求职、加薪时的现实优势。2012届读研本科毕业生中有28%转换了专业，超过四成转专业者是为了更好地就业。但对同期毕业生就业去向的对比则显示，硕士毕业生的签约率比本科和高职高专毕业生都低。</p>
+				        	<p><a class="btn tryBtn"><i class="icon-arrow-up"></i> 试一试 </a></p>
+						</div>
+					</div>						
+				</div>
+				<div class="item">
+					<div class="row">
+
+						<div class="span3 offset1">
+				        	<h2>招聘</h2>
+				        	<p id="text">调查显示，企业不发年终奖确实会伤透不少职场人的心，但年终奖并不是决定职场人跳槽与否的唯一标准，如果公司可以给出切实可行的替代措施，员工也愿意与企业共渡难关。毕竟比起一次性的红包，长远的职业规划才是职场人最关心的事情。 </p>
+				        	<p><a class="btn tryBtn"><i class="icon-arrow-up"></i> 试一试 </a></p>
+						</div>
+						<div class="span3">
+				        	<h2>文化</h2>
+				        	<p id="text">中国台湾的名媛蔡承颖获封“年度元媛”。元媛舞会早在1780年诞生于欧洲，参加上海国际元媛舞会的元媛也都系出名门，首届“尚美年度元媛”郝汉祯，是郝龙斌的女儿；第二届“尚美年度元媛”梁周洋，是梁启超的后裔，梁思成与林徽因的曾孙女。</p>
+				        	<p><a class="btn tryBtn"><i class="icon-arrow-up"></i> 试一试</a></p>
+						</div>
+						<div class="span3">
+				        	<h2>军事</h2>
+				        	<p id="text">以色列的核计划得到不断进展，引起了苏联的极大忧虑，为解决以色列核问题，苏联向阿拉伯国家递送假情报，以期挑起冲突，计划在冲突中摧毁以色列核设施。1967年5月，埃及，叙利亚等国开始全力备战，并做好了对以色列发动全面战争的准备。</p>
+				        	<p><a class="btn tryBtn"><i class="icon-arrow-up"></i> 试一试 </a></p>
+						</div>
+					</div>						
+				</div>
+			</div>
+			<!-- 旋转木马导航 -->
+			<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+			<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+		</div>
+	  
+		<hr>
+
+
+	  	
+	  	<!-- 隐藏部分 -->	
+		<div class="row">
+			<!-- 对话框 -->
+			<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 id="myModalLabel">分类结果</h4>
+			  </div>
+			  <div class="modal-body text-center"></div>
+			  <div class="modal-footer text-center">
+				<a id="correctBtn" onclick="correct();" role="button" class="btn" >我要纠错</a>
+				<button class="btn btn-primary" data-dismiss="modal" >确定</button>
+			  </div>
+
+			</div>
+		</div>
+	    <form id="correctForm" method="post" action="./correct">
+	  		<input type="hidden" id="label" value=""></input>
+	    </form>
+		
+		<!-- 底部 -->
+	    <footer class="brand text-center">
+	    	<p>Baiyawen @ 2014</p>
+	    </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./resources/scripts/jquery.js"></script>
+	<script src="./resources/scripts/bootstrap/bootstrap.js"></script>
+
+	<script>
+	$(document).ready(function(){
+	  $('#startBtn').button();
+	  $('#startBtn').tooltip({
+    	animation: true,
+    	placement: "bottom",
+    	title: "请点击",
+	    trigger: "manual",
+    	delay: { show: 0, hide: 100 }
+      });
+	  $(".tryBtn").click(function(){
+	    var txt = ($(this).parent().parent().find('#text').text());
+	    $('#content').val(txt);
+	    $('body,html').animate({scrollTop:0},400);
+	    $('#startBtn').tooltip('show');
+	  });
+
+	});
+
+	function correct(){
+		var vform = document.getElementById("correctForm");
+		var content = $('#content').val();
+		var label = $('#label').val(); 
+        
+		var labelInput = document.createElement("input") ;
+        labelInput.setAttribute("name", "label");   
+        labelInput.setAttribute("value", label); 
+        var contentInput = document.createElement("input") ;
+        contentInput.setAttribute("name", "content");   
+        contentInput.setAttribute("value", content); 
+        
+        vform.appendChild(labelInput);
+		vform.appendChild(contentInput);
+		vform.submit();
+	}
+	function hideWarning(){
+		$('.alert').hide();
+	}
+
+	function clickStart(){
+		$('#startBtn').button('loading');
+		$('#startBtn').tooltip('hide');
+
+	 }
+	function clearContent(){
+		$('#content').val('');
+		$('#startBtn').button('reset');
+		$('#startBtn').tooltip('hide');
+	}
+	var idset = new Array();
+	function isExist(id){
+		if(idset.length==0){
+			return -1;
+		}
+		for(var i=0;i<idset.length;i++){
+		if(id == idset[i])
+			return i;
+		}
+		return -1;
+	}
+    function rand(num) {
+        var randid = parseInt(Math.random() * (num+1) );
+        while(isExist(randid)>-1){
+        	randid = parseInt(Math.random() * (num+1) );
+        }
+        idset.push(randid);
+        return randid;
+    }
+	function makefontsize(score){
+		var seed = parseInt(score*2);
+		if(seed>26){
+			seed=26;
+		}
+		return seed+4;
+	}
+	$('#myModal').on('show', function (e) {
+
+		var content = $("#content").val();
+		content = content.replace(/:/g," ");
+		if(content.trim()==''){
+			$('.alert').show();
+			$('#startBtn').button('reset');
+			return e.preventDefault();
+		}else{
+			jQuery.ajax({
+				type : "POST",
+				async : false,
+				url : "./classify",
+				data : {
+					content:content
+				},
+				dataType : 'json',
+				beforeSend : function() {
+				},
+				success : function(data) {
+
+					if(data.success=="true")
+					{	
+						var ctxt = '<h1>'+data.label+'</h1>';
+						ctxt += '<div class="text-center row" style="line-height:30px;margin:30px 0px 30px;">';
+						ctxt += '<div class="span3 offset1">';
+						
+						var wordScore = data.wordScore;
+						var topWords = data.topWords;
+						var edge = 100;
+						if(topWords.length<100){
+							edge = topWords.length-1;
+						}
+						
+						for(var k=0;k<20 && k<topWords.length;k++){
+							var rindex = rand(edge);
+							var rword = topWords[rindex];
+							var score = wordScore[rword];
+							ctxt += ' <abbr title="'+rword+' score '+parseInt(score)+'" value="'+rindex+'" style="font-size:'+ makefontsize(score)+'px;">'+rword+'</abbr> ';
+						}
+
+						ctxt += '</div></div>'
+						$('#myModal .modal-body').html(ctxt);
+						$('#correctForm #label').val(data.label);
+					}
+					else
+					{
+						alert("操作失败.");
+						return e.preventDefault();
+					}
+				},
+				error:function(){
+					alert("网络异常,请刷新页面.");
+					return e.preventDefault();
+				}
+			});// end of ajax
+		}
+
+	})
+	
+	$('#myModal').on('shown', function (e) {		
+		$('#startBtn').button('reset');
+		idset.length=0;
+	})
+	</script>
+  
+</body></html>

@@ -1,0 +1,12 @@
+Input Path: /home/hadoop/hadoop-1.0.4/bak-classify/labelindex
+Key class: class org.apache.hadoop.io.Text Value Class: class org.apache.hadoop.io.IntWritable
+Key: C000008: Value: 0
+Key: C000010: Value: 1
+Key: C000013: Value: 2
+Key: C000014: Value: 3
+Key: C000016: Value: 4
+Key: C000020: Value: 5
+Key: C000022: Value: 6
+Key: C000023: Value: 7
+Key: C000024: Value: 8
+Count: 9
